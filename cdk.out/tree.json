@@ -1,0 +1,264 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "NewCdkStack": {
+        "id": "NewCdkStack",
+        "path": "NewCdkStack",
+        "children": {
+          "LambdaFunction": {
+            "id": "LambdaFunction",
+            "path": "NewCdkStack/LambdaFunction",
+            "children": {
+              "ServiceRole": {
+                "id": "ServiceRole",
+                "path": "NewCdkStack/LambdaFunction/ServiceRole",
+                "children": {
+                  "ImportServiceRole": {
+                    "id": "ImportServiceRole",
+                    "path": "NewCdkStack/LambdaFunction/ServiceRole/ImportServiceRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.133.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "NewCdkStack/LambdaFunction/ServiceRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "Service": "lambda.amazonaws.com"
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        },
+                        "managedPolicyArns": [
+                          {
+                            "Fn::Join": [
+                              "",
+                              [
+                                "arn:",
+                                {
+                                  "Ref": "AWS::Partition"
+                                },
+                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+                              ]
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.133.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.133.0"
+                }
+              },
+              "Code": {
+                "id": "Code",
+                "path": "NewCdkStack/LambdaFunction/Code",
+                "children": {
+                  "Stage": {
+                    "id": "Stage",
+                    "path": "NewCdkStack/LambdaFunction/Code/Stage",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.AssetStaging",
+                      "version": "2.133.0"
+                    }
+                  },
+                  "AssetBucket": {
+                    "id": "AssetBucket",
+                    "path": "NewCdkStack/LambdaFunction/Code/AssetBucket",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
+                      "version": "2.133.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
+                  "version": "2.133.0"
+                }
+              },
+              "Resource": {
+                "id": "Resource",
+                "path": "NewCdkStack/LambdaFunction/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
+                  "aws:cdk:cloudformation:props": {
+                    "code": {
+                      "s3Bucket": {
+                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+                      },
+                      "s3Key": "c711d38139dc2ba84154a706bf0896b08bc942561f8a030971e315a3d27f4294.zip"
+                    },
+                    "handler": "main.handler",
+                    "role": {
+                      "Fn::GetAtt": [
+                        "LambdaFunctionServiceRoleC555A460",
+                        "Arn"
+                      ]
+                    },
+                    "runtime": "python3.12"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
+                  "version": "2.133.0"
+                }
+              },
+              "FunctionUrl": {
+                "id": "FunctionUrl",
+                "path": "NewCdkStack/LambdaFunction/FunctionUrl",
+                "children": {
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "NewCdkStack/LambdaFunction/FunctionUrl/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::Lambda::Url",
+                      "aws:cdk:cloudformation:props": {
+                        "authType": "NONE",
+                        "cors": {
+                          "allowHeaders": [
+                            "*"
+                          ],
+                          "allowMethods": [
+                            "*"
+                          ],
+                          "allowOrigins": [
+                            "*"
+                          ]
+                        },
+                        "targetFunctionArn": {
+                          "Fn::GetAtt": [
+                            "LambdaFunctionBF21E41F",
+                            "Arn"
+                          ]
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_lambda.CfnUrl",
+                      "version": "2.133.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.FunctionUrl",
+                  "version": "2.133.0"
+                }
+              },
+              "invoke-function-url": {
+                "id": "invoke-function-url",
+                "path": "NewCdkStack/LambdaFunction/invoke-function-url",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                  "aws:cdk:cloudformation:props": {
+                    "action": "lambda:InvokeFunctionUrl",
+                    "functionName": {
+                      "Fn::GetAtt": [
+                        "LambdaFunctionBF21E41F",
+                        "Arn"
+                      ]
+                    },
+                    "functionUrlAuthType": "NONE",
+                    "principal": "*"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                  "version": "2.133.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_lambda.Function",
+              "version": "2.133.0"
+            }
+          },
+          "Url": {
+            "id": "Url",
+            "path": "NewCdkStack/Url",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
+              "version": "2.133.0"
+            }
+          },
+          "CDKMetadata": {
+            "id": "CDKMetadata",
+            "path": "NewCdkStack/CDKMetadata",
+            "children": {
+              "Default": {
+                "id": "Default",
+                "path": "NewCdkStack/CDKMetadata/Default",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.133.0"
+                }
+              },
+              "Condition": {
+                "id": "Condition",
+                "path": "NewCdkStack/CDKMetadata/Condition",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnCondition",
+                  "version": "2.133.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.3.0"
+            }
+          },
+          "BootstrapVersion": {
+            "id": "BootstrapVersion",
+            "path": "NewCdkStack/BootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnParameter",
+              "version": "2.133.0"
+            }
+          },
+          "CheckBootstrapVersion": {
+            "id": "CheckBootstrapVersion",
+            "path": "NewCdkStack/CheckBootstrapVersion",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnRule",
+              "version": "2.133.0"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "aws-cdk-lib.Stack",
+          "version": "2.133.0"
+        }
+      },
+      "Tree": {
+        "id": "Tree",
+        "path": "Tree",
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.3.0"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "aws-cdk-lib.App",
+      "version": "2.133.0"
+    }
+  }
+}
